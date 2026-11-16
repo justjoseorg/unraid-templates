@@ -35,11 +35,18 @@ Both **Web terminal username** and **Web terminal password** are customizable
 in the template and in **Edit Container** later. They are browser credentials,
 not GitHub credentials.
 
-Use **New terminal** in the left sidebar to run multiple tasks, switch terminals
-without interrupting them, rename them, or close them. All terminals share the
-same Copilot/GitHub sign-in, permissions, files and tools; no separate accounts
-are created. New terminals start in `/Storage/repos`. Each browser page manages
-its own set; closing or reloading it ends those terminal connections.
+Use **New terminal** in the shared left sidebar to run multiple tasks, switch
+terminals without interrupting them, rename them, or close them. All terminals
+share the same Copilot/GitHub sign-in, permissions, files and tools. Selecting
+an existing terminal from another device resumes that exact shell/CLI process.
+
+Every new browser page initially creates a fresh shell in `/Storage/repos`.
+Untouched shells expire after **60 seconds**. Interacted-with shells remain
+for **24 hours after activity**; running foreground/background jobs always
+prevent automatic removal, and completed jobs get a fresh retention period.
+The template exposes both timeouts in seconds (`0` disables expiry).
+Closing/reloading the browser only detaches; the **x** button closes the shell
+on all devices. A container restart/update still ends its running processes.
 
 **GPU device** optionally passes through an Intel/AMD GPU without privileged
 mode. Remove this configuration entry if you do not want GPU access or the host
