@@ -28,7 +28,15 @@ Set a strong **Web terminal password** and review the paths and port:
 | --- | --- |
 | Web terminal | Port `7681`, username `terminal` |
 | Persistent configuration | `/mnt/user/appdata/copilot-cli` -> `/config` |
-| Project workspace | `/mnt/user/appdata/copilot-cli/workspace` -> `/workspace` |
+| Repositories / starting directory | `/mnt/user/Storage/repos` -> `/Storage/repos` |
+
+Both **Web terminal username** and **Web terminal password** are customizable
+in the template and in **Edit Container** later. They are browser credentials,
+not GitHub credentials.
+
+Each browser connection has its own shell/PTY, so devices can keep separate
+terminals open simultaneously. All connections start in `/Storage/repos` and
+share the mounted files and GitHub authentication.
 
 Open the container's **WebUI**, enter the terminal credentials, then run:
 
@@ -41,6 +49,14 @@ Copilot requires a GitHub account with CLI access. For GitHub CLI operations,
 also run `gh auth login --web`. Authentication is stored under `/config`;
 do not publish or share that directory.
 
+The image provides an automatically unlocked Secret Service keyring.
+Its encrypted files and default unlock secret both persist in `/config`;
+protect and back up the entire directory. See the image repository for
+separately mounting an unlock secret and upgrading from plaintext storage.
+
+For an existing installation, retain your configured credentials when updating
+the saved template. The old Appdata workspace is not moved or deleted.
+
 The terminal runs as root inside the container. Only mount the projects it
 should access; do not add the Docker socket or the host root filesystem.
 Keep the web port on a trusted LAN or VPN. Use TLS through a reverse proxy
@@ -52,7 +68,8 @@ See the image repository for limitations and update instructions.
 
 ## License and trademarks
 
-Template code is MIT licensed. The included Copilot identification logo was
+Template code and the new original terminal icon are MIT licensed.
+The legacy Copilot identification logo (`assets/copilot-logo.svg`) was
 provided with the original project and is sourced from
 [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:GitHub_Copilot_logo.svg).
 GitHub Copilot is a GitHub trademark. This project is not affiliated with or
