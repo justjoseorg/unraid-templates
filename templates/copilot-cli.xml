@@ -8,7 +8,7 @@
   <Privileged>false</Privileged>
   <Support>https://github.com/justjoseorg/copilot-cli-unraid/issues</Support>
   <Project>https://github.com/justjoseorg/copilot-cli-unraid</Project>
-  <Overview>GitHub Copilot CLI with a persistent system keyring and independent browser terminals.</Overview>
+  <Overview>GitHub Copilot CLI with sidebar terminals, Node.js, Python, persistent tools and optional GPU access.</Overview>
   <Category>Productivity: Tools:</Category>
   <Description>
     A browser terminal for GitHub Copilot CLI and GitHub CLI, backed by persistent Alpine Linux storage.
@@ -16,16 +16,21 @@
     Set a strong web terminal password, then open the WebUI. The terminal supports colors, copy/paste, and interactive applications.
     Map /config to Appdata. GitHub and Copilot credentials, configuration, caches, and packages installed with `apk add` persist there.
     Storage/repos is mounted at /Storage/repos and is the starting directory for every connection.
-    Each browser connection gets its own shell. Authentication and the encrypted system keyring persist in /config.
+    Open multiple terminals from the left sidebar to run concurrent tasks. Switching keeps tasks running.
+    All terminals share the same GitHub sign-in, files, permissions and installed tools.
+    Node.js and Python are included. Python pip packages, global npm tools, authentication and the encrypted system keyring persist in /config.
+    Alpine packages installed with apk add are restored on container recreation.
+    The optional GPU device entry exposes /dev/dri without privileged mode; remove it if not needed or unavailable.
     Both web terminal credentials are customizable below. These are separate from your GitHub account.
     The terminal runs as root inside the container; do not expose it directly to the internet.
   </Description>
   <WebUI>http://[IP]:[PORT:7681]/</WebUI>
   <Icon>https://raw.githubusercontent.com/justjoseorg/unraid-templates/main/assets/copilot-cli.png</Icon>
   <TemplateURL>https://raw.githubusercontent.com/justjoseorg/unraid-templates/main/templates/copilot-cli.xml</TemplateURL>
-  <Config Name="Persistent configuration" Target="/config" Default="/mnt/user/appdata/copilot-cli" Mode="rw" Description="Stores authentication, settings, cache, and packages installed with apk." Type="Path" Display="always" Required="true" Mask="false"/>
+  <Config Name="Persistent configuration" Target="/config" Default="/mnt/user/appdata/copilot-cli" Mode="rw" Description="Stores authentication, keyring, settings, the shared Python environment, global npm tools, caches and the list of additional APK packages." Type="Path" Display="always" Required="true" Mask="false"/>
   <Config Name="Repositories" Target="/Storage/repos" Default="/mnt/user/Storage/repos" Mode="rw" Description="Storage share repositories folder. Every new terminal starts here; other Storage folders are not exposed." Type="Path" Display="always" Required="true" Mask="false"/>
   <Config Name="Web terminal port" Target="7681" Default="7681" Mode="tcp" Description="Browser terminal port." Type="Port" Display="always" Required="true" Mask="false"/>
   <Config Name="Web terminal username" Target="WEB_TERMINAL_USER" Default="terminal" Mode="" Description="Choose the username for WebUI sign-in. Editable here; this is not your GitHub username." Type="Variable" Display="always" Required="true" Mask="false"/>
   <Config Name="Web terminal password" Target="WEB_TERMINAL_PASSWORD" Default="" Mode="" Description="Choose a strong WebUI password. Editable here and separate from your GitHub credentials and keyring unlock secret." Type="Variable" Display="always" Required="true" Mask="true"/>
+  <Config Name="GPU device (optional)" Target="/dev/dri" Default="/dev/dri" Mode="" Description="Intel/AMD GPU access without privileged mode. Remove this device entry to disable, especially on hosts without /dev/dri; do not leave it blank. GPU workloads may need additional userspace libraries." Type="Device" Display="always" Required="false" Mask="false"/>
 </Container>

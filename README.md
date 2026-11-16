@@ -3,7 +3,7 @@
 ## Copilot CLI
 
 A password-protected browser terminal with GitHub Copilot CLI, GitHub CLI,
-and persistent configuration, projects and additional Alpine packages.
+Node.js, Python, a multi-terminal sidebar and persistent developer tools.
 The Docker image and its build workflow live in
 [copilot-cli-unraid](https://github.com/justjoseorg/copilot-cli-unraid).
 
@@ -29,14 +29,22 @@ Set a strong **Web terminal password** and review the paths and port:
 | Web terminal | Port `7681`, username `terminal` |
 | Persistent configuration | `/mnt/user/appdata/copilot-cli` -> `/config` |
 | Repositories / starting directory | `/mnt/user/Storage/repos` -> `/Storage/repos` |
+| GPU device (optional) | `/dev/dri`; remove the device entry to disable |
 
 Both **Web terminal username** and **Web terminal password** are customizable
 in the template and in **Edit Container** later. They are browser credentials,
 not GitHub credentials.
 
-Each browser connection has its own shell/PTY, so devices can keep separate
-terminals open simultaneously. All connections start in `/Storage/repos` and
-share the mounted files and GitHub authentication.
+Use **New terminal** in the left sidebar to run multiple tasks, switch terminals
+without interrupting them, rename them, or close them. All terminals share the
+same Copilot/GitHub sign-in, permissions, files and tools; no separate accounts
+are created. New terminals start in `/Storage/repos`. Each browser page manages
+its own set; closing or reloading it ends those terminal connections.
+
+**GPU device** optionally passes through an Intel/AMD GPU without privileged
+mode. Remove this configuration entry if you do not want GPU access or the host
+has no `/dev/dri`. Do not leave its value blank. Additional userspace libraries
+may be required by your chosen workload; this does not install a compute stack.
 
 Open the container's **WebUI**, enter the terminal credentials, then run:
 
@@ -64,6 +72,11 @@ when appropriate; HTTP basic authentication alone does not encrypt traffic.
 
 Use `apk add PACKAGE` in the terminal to install additional packages.
 They are reinstalled from `/config/apk-packages` after container recreation.
+Python is preinstalled and `pip install PACKAGE` uses the persistent shared
+environment at `/config/python`. `npm install --global PACKAGE` persists
+under `/config/npm`. Retain `/config` when updating the image.
+Incompatible interpreter/architecture upgrades can require rebuilding native
+dependencies.
 See the image repository for limitations and update instructions.
 
 ## License and trademarks
