@@ -45,6 +45,13 @@ Untouched shells expire after **60 seconds**. Interacted-with shells remain
 for **24 hours after activity**; running foreground/background jobs always
 prevent automatic removal, and completed jobs get a fresh retention period.
 The template exposes both timeouts in seconds (`0` disables expiry).
+The WebUI also has an editable minutes dropdown beside **Unused shells clear
+automatically**. Presets or custom nonnegative numbers (including fractions)
+set the unused-shell delay; `0` disables it. Changes apply across devices and
+persist in `/config/terminal-settings.json`, overriding the template's unused
+shell grace value. Previously used shells retain their separate 24-hour limit.
+Use **Hide** to collapse the sidebar and the circular **>_** header button to
+restore it without reconnecting the active terminal.
 Closing/reloading the browser only detaches; the **x** button closes the shell
 on all devices. A container restart/update still ends its running processes.
 
@@ -71,6 +78,25 @@ separately mounting an unlock secret and upgrading from plaintext storage.
 
 For an existing installation, retain your configured credentials when updating
 the saved template. The old Appdata workspace is not moved or deleted.
+
+### Image updates
+
+The template tracks `ghcr.io/justjoseorg/copilot-cli-unraid:latest`.
+Each push to the image repository's `main` branch runs its checks and, if they
+pass, publishes a replacement image for Unraid to detect. Keep **Repository**
+on `:latest`; a pinned commit tag or digest will not follow these updates.
+Template-only edits do not rebuild the image or change an installed container's
+saved settings.
+
+Once the image repository's **Publish container image** workflow succeeds,
+select **Docker > Check for Updates** on Unraid and apply the `copilot-cli`
+update. No new template import is needed for an image-only update.
+
+To install updates automatically, install **CA Auto Update Applications**
+from Apps, enable updates for `copilot-cli`, and choose a schedule on your
+Unraid host. The template cannot enable that host-side setting. Updating
+restarts the container and ends running terminals and jobs, so choose an idle
+maintenance window. Keep your `/config` and repositories mappings unchanged.
 
 The terminal runs as root inside the container. Only mount the projects it
 should access; do not add the Docker socket or the host root filesystem.
