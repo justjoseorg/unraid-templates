@@ -1,7 +1,16 @@
 <?xml version="1.0"?>
 <Container version="2">
   <Name>copilot-cli</Name>
-  <Repository>ghcr.io/justjoseorg/copilot-cli-unraid:latest</Repository>
+  <Repository>ghcr.io/justjoseorg/copilot-cli-unraid:stable</Repository>
+  <Branch>
+    <Tag>stable</Tag>
+    <TagDescription>Stable - recommended releases from main.</TagDescription>
+  </Branch>
+  <Branch>
+    <Tag>beta</Tag>
+    <TagDescription>Beta - previews from the beta branch; may include unfinished changes.</TagDescription>
+    <Beta>true</Beta>
+  </Branch>
   <Registry>https://github.com/justjoseorg/copilot-cli-unraid/pkgs/container/copilot-cli-unraid</Registry>
   <Network>bridge</Network>
   <Shell>sh</Shell>
@@ -13,6 +22,8 @@
   <Description>
     A browser terminal for GitHub Copilot CLI and GitHub CLI, backed by persistent Alpine Linux storage.
 
+    Stable is selected by default. Choose the beta branch for previews, or change the Repository tag to :beta when installing from a manually imported template.
+    Existing :latest installations continue to follow stable. Switching channels restarts the container; back up /config first.
     Set a strong web terminal password, then open the WebUI. The terminal supports colors, copy/paste, and interactive applications.
     Map /config to Appdata. GitHub and Copilot credentials, configuration, caches, and packages installed with `apk add` persist there.
     Storage/repos is mounted at /Storage/repos and is the starting directory for every connection.

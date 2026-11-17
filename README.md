@@ -26,6 +26,7 @@ Set a strong **Web terminal password** and review the paths and port:
 
 | Setting | Default |
 | --- | --- |
+| Release channel | `stable`; choose `beta` for previews |
 | Web terminal | Port `7681`, username `terminal` |
 | Persistent configuration | `/mnt/user/appdata/copilot-cli` -> `/config` |
 | Repositories / starting directory | `/mnt/user/Storage/repos` -> `/Storage/repos` |
@@ -34,6 +35,25 @@ Set a strong **Web terminal password** and review the paths and port:
 Both **Web terminal username** and **Web terminal password** are customizable
 in the template and in **Edit Container** later. They are browser credentials,
 not GitHub credentials.
+
+### Stable or beta
+
+| Channel | Image tag | Source branch |
+| --- | --- | --- |
+| Stable (recommended default) | `:stable` | `main` |
+| Beta (preview; may include unfinished changes) | `:beta` | `beta` |
+
+The template includes Community Applications' native **stable / beta** branch
+selector. When using the manually imported template above, choose the channel
+by setting **Repository** in **Add Container** to
+`ghcr.io/justjoseorg/copilot-cli-unraid:stable` or
+`ghcr.io/justjoseorg/copilot-cli-unraid:beta`.
+
+To switch an existing container, use **Edit Container**, change just that
+image tag, and apply. Retain your paths and credentials, back up `/config`
+before switching, and expect running terminals/jobs to stop during recreation.
+For side-by-side testing, use different container names, host ports and
+`/config` directories; do not share one configuration directory.
 
 Use **New terminal** in the shared left sidebar to run multiple tasks, switch
 terminals without interrupting them, rename them, or close them. All terminals
@@ -81,10 +101,12 @@ the saved template. The old Appdata workspace is not moved or deleted.
 
 ### Image updates
 
-The template tracks `ghcr.io/justjoseorg/copilot-cli-unraid:latest`.
-Each push to the image repository's `main` branch runs its checks and, if they
-pass, publishes a replacement image for Unraid to detect. Keep **Repository**
-on `:latest`; a pinned commit tag or digest will not follow these updates.
+The template defaults to `ghcr.io/justjoseorg/copilot-cli-unraid:stable`.
+Pushes to the image repository's `main` branch update `:stable` and `:latest`
+after checks pass. Pushes to `beta` update `:beta` without changing stable.
+Existing `:latest` containers require no tag change and remain on stable.
+Keep **Repository** on `:stable`, `:beta` or `:latest`; a pinned commit tag or
+digest will not follow these updates.
 Template-only edits do not rebuild the image or change an installed container's
 saved settings.
 
